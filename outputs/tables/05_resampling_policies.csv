@@ -1,0 +1,6 @@
+strategy,target_minority_share,mean_pr_auc,sd_pr_auc,mean_roc_auc,mean_train_rows,share_of_data_used,mean_score
+smote_enn_5pct,0.05,0.5145,0.0602,0.9386,85523,0.7127,0.005534
+random_undersample_10_to_1,0.1,0.505,0.0506,0.9476,3443,0.0287,0.012014
+smote_5pct,0.05,0.4899,0.03,0.9435,86295,0.7191,0.002562
+unweighted_baseline,,0.443,0.0305,0.9364,82500,0.6875,0.002233
+class_weight,,0.1123,0.0601,0.5647,82500,0.6875,0.013456

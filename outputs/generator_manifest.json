@@ -1,0 +1,25 @@
+{
+  "seed": 42,
+  "n_transactions": 300001,
+  "target_fraud_rate": 0.0035,
+  "realised_fraud_rate": 0.003499988333372222,
+  "episode_volume_share": 0.006,
+  "episodes": 637,
+  "episode_transactions": 1800,
+  "episode_fraud_transactions": 937,
+  "scattered_fraud_transactions": 113,
+  "legitimate_spree_transactions": 8946,
+  "n_cards": 10000,
+  "ring_devices": 60,
+  "identity_coverage": 0.2235992546691511,
+  "mechanisms": [
+    "account-takeover episodes: short bursts on one card with escalating amounts",
+    "repeat victimisation: previously attacked cards are re-targeted",
+    "shared device ring: a small device pool serves many episode cards",
+    "card testing: sub-3-unit opening transactions",
+    "night-time preference during episodes",
+    "elevated cardholder-verification mismatches during episodes",
+    "legitimate sprees so that velocity is not a perfect predictor",
+    "scattered fraud with no explanatory features"
+  ]
+}

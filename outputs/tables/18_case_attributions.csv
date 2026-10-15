@@ -1,0 +1,13 @@
+case,score,actual_fraud,amount,feature,value,shap_contribution,abs_contribution,direction
+highest_scoring_fraud,0.666667,1,138.78,card1_freq_code,0.037423809523809526,3.4314180497434044,3.4314180497434044,increases risk
+highest_scoring_fraud,0.666667,1,138.78,mismatch_count,6.0,2.833827923034164,2.833827923034164,increases risk
+highest_scoring_fraud,0.666667,1,138.78,email_txn_count_past,1223.0,1.1360401086435328,1.1360401086435328,increases risk
+highest_scoring_fraud,0.666667,1,138.78,addr_txn_count_past,,1.0243079679282054,1.0243079679282054,increases risk
+highest_scoring_fraud,0.666667,1,138.78,card_txn_24h,70.0,0.9020395782855811,0.9020395782855811,increases risk
+highest_scoring_fraud,0.666667,1,138.78,card_hours_since_prev,0.05416666666666667,0.8710344925482454,0.8710344925482454,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,card1_freq_code,0.037423809523809526,3.5261267496005337,3.5261267496005337,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,mismatch_count,5.0,2.894261432419294,2.894261432419294,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,email_txn_count_past,2663.0,1.0828272965983312,1.0828272965983312,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,dist1_log,5.780743515792329,0.8249927698515463,0.8249927698515463,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,is_night,1.0,0.7003910526107623,0.7003910526107623,increases risk
+highest_scoring_false_positive,0.666667,0,218.17,card_hist_fraud_rate,0.07326838382490325,0.670385743888478,0.670385743888478,increases risk

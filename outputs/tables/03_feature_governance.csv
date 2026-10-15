@@ -1,0 +1,17 @@
+column_name,role,note
+is_fraud,label,never a feature
+chargeback_amount,post_hoc,known only after the chargeback is settled - dropped before modelling
+chargeback_days,post_hoc,known only after the chargeback is settled - dropped before modelling
+case_closed,post_hoc,case resolution status - dropped before modelling
+C1,vendor_aggregate,all-time counter that includes later transactions - sensitivity study only
+C2,vendor_aggregate,all-time counter that includes later transactions - sensitivity study only
+C3,vendor_aggregate,all-time counter that includes later transactions - sensitivity study only
+C4,vendor_aggregate,all-time counter that includes later transactions - sensitivity study only
+C5,vendor_aggregate,forward-looking 7-day counter - sensitivity study only
+C6,vendor_aggregate,deviation from an all-time mean - sensitivity study only
+TransactionID,identifier,"row key, no predictive meaning"
+card1,identifier,"raw identifier, replaced by card1_freq_code fitted on train"
+addr1,identifier,"raw identifier, replaced by addr_txn_count_past"
+TransactionDT,ordering,used for the temporal split only
+card_hist_fraud_rate,causal_label,"lagged 60 days, assumes chargebacks are settled by then"
+addr_hist_fraud_rate,causal_label,"lagged 60 days, assumes chargebacks are settled by then"

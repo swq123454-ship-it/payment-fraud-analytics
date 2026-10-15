@@ -1,0 +1,23 @@
+check_name,dimension,metric,value,status,notes
+row_count_raw,completeness,rows,300001.0,PASS,raw_transactions as delivered
+row_count_staging,completeness,rows,300001.0,PASS,after de-duplication and amount filters
+rows_dropped_share,completeness,share,0.0,PASS,retention above 99% is expected
+duplicate_transaction_ids,uniqueness,rows,0.0,PASS,primary key must be unique after staging
+overall_fraud_rate,label_balance,share,0.0035,PASS,card-not-present fraud sits between 0.05% and 5%
+majority_class_share,label_balance,share,0.9965,INFO,accuracy of the all-negative classifier - the number this project refuses to report
+fraud_rate_month_2018-01,label_balance,share,0.002798,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-02,label_balance,share,0.003328,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-03,label_balance,share,0.003625,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-04,label_balance,share,0.003977,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-05,label_balance,share,0.002788,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-06,label_balance,share,0.004314,PASS,monthly label rate - drift here invalidates a static threshold
+fraud_rate_month_2018-07,label_balance,share,0.009642,PASS,monthly label rate - drift here invalidates a static threshold
+missing_share_card2,completeness,share,0.093126,INFO,missingness is itself predictive and is kept as a feature
+missing_share_addr1,completeness,share,0.091763,INFO,billing address
+missing_share_dist1,completeness,share,0.347856,INFO,distance between cardholder and merchant
+identity_coverage_fraud,completeness,share,0.390476,INFO,identity table coverage among fraudulent transactions
+identity_coverage_legitimate,completeness,share,0.223013,INFO,identity table coverage among legitimate transactions
+orphan_identity_rows,integrity,rows,0.0,PASS,identity rows that cannot be joined to a transaction
+non_positive_amounts,validity,rows,0.0,PASS,zero and negative amounts must not reach the model
+amount_p99,distribution,currency,675.84,INFO,99th percentile amount - the tail that drives loss-weighted cost
+duplicate_timestamp_share,uniqueness,share,0.013037,INFO,same-second transactions: bounded velocity resolution

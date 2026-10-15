@@ -1,0 +1,5 @@
+model,recall_at_1pct,precision_at_1pct,lift_at_1pct,recall_at_5pct,precision_at_5pct,lift_at_5pct
+lightgbm,0.8865,0.3644,88.65,0.9135,0.0751,18.27
+logistic_regression,0.8595,0.3533,85.95,0.9027,0.0742,18.05
+isolation_forest,0.5243,0.2156,52.43,0.9135,0.0751,18.27
+autoencoder,0.4973,0.2044,49.73,0.8865,0.0729,17.73

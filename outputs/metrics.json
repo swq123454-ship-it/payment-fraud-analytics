@@ -1,0 +1,957 @@
+{
+  "data": {
+    "mode": "synthetic",
+    "transactions": 300001,
+    "fraud_rate": 0.0035,
+    "train": 210000,
+    "test": 45000,
+    "oot": 45001,
+    "oot_frauds": 185,
+    "identity_coverage": 0.2236,
+    "generator_manifest": {
+      "seed": 42,
+      "n_transactions": 300001,
+      "target_fraud_rate": 0.0035,
+      "realised_fraud_rate": 0.003499988333372222,
+      "episode_volume_share": 0.006,
+      "episodes": 637,
+      "episode_transactions": 1800,
+      "episode_fraud_transactions": 937,
+      "scattered_fraud_transactions": 113,
+      "legitimate_spree_transactions": 8946,
+      "n_cards": 10000,
+      "ring_devices": 60,
+      "identity_coverage": 0.2235992546691511,
+      "mechanisms": [
+        "account-takeover episodes: short bursts on one card with escalating amounts",
+        "repeat victimisation: previously attacked cards are re-targeted",
+        "shared device ring: a small device pool serves many episode cards",
+        "card testing: sub-3-unit opening transactions",
+        "night-time preference during episodes",
+        "elevated cardholder-verification mismatches during episodes",
+        "legitimate sprees so that velocity is not a perfect predictor",
+        "scattered fraud with no explanatory features"
+      ]
+    }
+  },
+  "headline_oot": {
+    "n": 45001,
+    "positives": 185,
+    "base_rate": 0.004111,
+    "pr_auc": 0.5782,
+    "roc_auc": 0.9511,
+    "ks": 0.8887,
+    "brier": 0.002135,
+    "pr_auc_baseline": 0.004111,
+    "recall_at_capacity": {
+      "0.100%": 0.1514,
+      "0.200%": 0.3405,
+      "0.500%": 0.7676,
+      "1.000%": 0.8865,
+      "2.000%": 0.9027,
+      "5.000%": 0.9027
+    },
+    "precision_at_capacity": {
+      "0.100%": 0.6222,
+      "0.200%": 0.7,
+      "0.500%": 0.6311,
+      "1.000%": 0.3644,
+      "2.000%": 0.1856,
+      "5.000%": 0.0742
+    },
+    "lift_at_capacity": {
+      "0.100%": 151.35,
+      "0.200%": 170.27,
+      "0.500%": 153.52,
+      "1.000%": 88.65,
+      "2.000%": 45.14,
+      "5.000%": 18.05
+    },
+    "pr_auc_bootstrap": {
+      "mean": 0.5814,
+      "ci_low": 0.5002,
+      "ci_high": 0.6638
+    }
+  },
+  "models": [
+    {
+      "model": "lightgbm",
+      "test_pr_auc": 0.4614,
+      "test_roc_auc": 0.9596,
+      "oot_pr_auc": 0.6044,
+      "oot_roc_auc": 0.95,
+      "oot_ks": 0.8927,
+      "oot_pr_auc_ci_low": 0.5166,
+      "oot_pr_auc_ci_high": 0.691
+    },
+    {
+      "model": "logistic_regression",
+      "test_pr_auc": 0.4427,
+      "test_roc_auc": 0.9625,
+      "oot_pr_auc": 0.5879,
+      "oot_roc_auc": 0.95,
+      "oot_ks": 0.8813,
+      "oot_pr_auc_ci_low": null,
+      "oot_pr_auc_ci_high": null
+    },
+    {
+      "model": "isolation_forest",
+      "test_pr_auc": 0.1458,
+      "test_roc_auc": 0.9256,
+      "oot_pr_auc": 0.2221,
+      "oot_roc_auc": 0.9567,
+      "oot_ks": 0.8694,
+      "oot_pr_auc_ci_low": null,
+      "oot_pr_auc_ci_high": null
+    },
+    {
+      "model": "autoencoder",
+      "test_pr_auc": 0.1047,
+      "test_roc_auc": 0.928,
+      "oot_pr_auc": 0.1838,
+      "oot_roc_auc": 0.9579,
+      "oot_ks": 0.8484,
+      "oot_pr_auc_ci_low": null,
+      "oot_pr_auc_ci_high": null
+    }
+  ],
+  "calibration": {
+    "ece_raw": 0.002321,
+    "ece_calibrated": 0.000903
+  },
+  "sampling": [
+    {
+      "strategy": "smote_enn_5pct",
+      "target_minority_share": 0.05,
+      "mean_pr_auc": 0.5145,
+      "sd_pr_auc": 0.0602,
+      "mean_roc_auc": 0.9386,
+      "mean_train_rows": 85523,
+      "share_of_data_used": 0.7127,
+      "mean_score": 0.005534
+    },
+    {
+      "strategy": "random_undersample_10_to_1",
+      "target_minority_share": 0.1,
+      "mean_pr_auc": 0.505,
+      "sd_pr_auc": 0.0506,
+      "mean_roc_auc": 0.9476,
+      "mean_train_rows": 3443,
+      "share_of_data_used": 0.0287,
+      "mean_score": 0.012014
+    },
+    {
+      "strategy": "smote_5pct",
+      "target_minority_share": 0.05,
+      "mean_pr_auc": 0.4899,
+      "sd_pr_auc": 0.03,
+      "mean_roc_auc": 0.9435,
+      "mean_train_rows": 86295,
+      "share_of_data_used": 0.7191,
+      "mean_score": 0.002562
+    },
+    {
+      "strategy": "unweighted_baseline",
+      "target_minority_share": null,
+      "mean_pr_auc": 0.443,
+      "sd_pr_auc": 0.0305,
+      "mean_roc_auc": 0.9364,
+      "mean_train_rows": 82500,
+      "share_of_data_used": 0.6875,
+      "mean_score": 0.002233
+    },
+    {
+      "strategy": "class_weight",
+      "target_minority_share": null,
+      "mean_pr_auc": 0.1123,
+      "sd_pr_auc": 0.0601,
+      "mean_roc_auc": 0.5647,
+      "mean_train_rows": 82500,
+      "share_of_data_used": 0.6875,
+      "mean_score": 0.013456
+    }
+  ],
+  "leakage_ablation": [
+    {
+      "variant": "A_resample_before_split_random_folds",
+      "resampling_placement": "whole window, before folding",
+      "fold_protocol": "random stratified 5-fold",
+      "mean_pr_auc": 0.9948
+    },
+    {
+      "variant": "B_resample_inside_fold_random_folds",
+      "resampling_placement": "inside each fold",
+      "fold_protocol": "random stratified 5-fold",
+      "mean_pr_auc": 0.4884
+    },
+    {
+      "variant": "C_resample_inside_fold_time_folds",
+      "resampling_placement": "inside each fold",
+      "fold_protocol": "forward-chaining, 4 folds",
+      "mean_pr_auc": 0.4899
+    },
+    {
+      "variant": "D_no_resampling_time_folds",
+      "resampling_placement": "none",
+      "fold_protocol": "forward-chaining, 4 folds",
+      "mean_pr_auc": 0.443
+    },
+    {
+      "variant": "A_minus_B_resampling_placement_effect",
+      "resampling_placement": "-",
+      "fold_protocol": "where the resampling happened, folds held fixed",
+      "mean_pr_auc": 0.5065
+    },
+    {
+      "variant": "B_minus_C_random_vs_time_fold_effect",
+      "resampling_placement": "-",
+      "fold_protocol": "the fold protocol, resampling placement held fixed",
+      "mean_pr_auc": -0.0015
+    },
+    {
+      "variant": "A_minus_C_total_optimism",
+      "resampling_placement": "-",
+      "fold_protocol": "what a typical tutorial would report",
+      "mean_pr_auc": 0.505
+    },
+    {
+      "variant": "C_minus_D_value_of_resampling",
+      "resampling_placement": "-",
+      "fold_protocol": "what the resampling machinery is worth",
+      "mean_pr_auc": 0.0469
+    }
+  ],
+  "vendor_leakage_study": [
+    {
+      "feature_set": "causal features only",
+      "n_features": 46,
+      "test_pr_auc": 0.4614,
+      "oot_pr_auc": 0.6044,
+      "oot_roc_auc": 0.95,
+      "pr_auc_gap": 0.0
+    },
+    {
+      "feature_set": "plus vendor counters",
+      "n_features": 52,
+      "test_pr_auc": 0.4945,
+      "oot_pr_auc": 0.6181,
+      "oot_roc_auc": 0.9507,
+      "pr_auc_gap": 0.0137
+    }
+  ],
+  "review_band_sensitivity": [
+    {
+      "review_cost": 1.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 1.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": true,
+      "n_reviewed": 37,
+      "n_declined": 280,
+      "review_rate": 0.000822,
+      "two_threshold_cost": 5719.12,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 21.76
+    },
+    {
+      "review_cost": 1.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": true,
+      "n_reviewed": 208,
+      "n_declined": 182,
+      "review_rate": 0.004622,
+      "two_threshold_cost": 5432.68,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 308.2
+    },
+    {
+      "review_cost": 1.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": true,
+      "n_reviewed": 339,
+      "n_declined": 0,
+      "review_rate": 0.007533,
+      "two_threshold_cost": 3663.37,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 2077.51
+    },
+    {
+      "review_cost": 2.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 2.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 2.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": true,
+      "n_reviewed": 119,
+      "n_declined": 182,
+      "review_rate": 0.002644,
+      "two_threshold_cost": 5565.28,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 175.6
+    },
+    {
+      "review_cost": 2.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": true,
+      "n_reviewed": 250,
+      "n_declined": 0,
+      "review_rate": 0.005556,
+      "two_threshold_cost": 3956.29,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 1784.59
+    },
+    {
+      "review_cost": 4.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 4.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 4.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": true,
+      "n_reviewed": 82,
+      "n_declined": 182,
+      "review_rate": 0.001822,
+      "two_threshold_cost": 5737.55,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 3.33
+    },
+    {
+      "review_cost": 4.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": true,
+      "n_reviewed": 213,
+      "n_declined": 0,
+      "review_rate": 0.004733,
+      "two_threshold_cost": 4414.05,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 1326.83
+    },
+    {
+      "review_cost": 8.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 8.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 8.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 8.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": true,
+      "n_reviewed": 82,
+      "n_declined": 182,
+      "review_rate": 0.001822,
+      "two_threshold_cost": 5204.16,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 536.72
+    },
+    {
+      "review_cost": 16.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 16.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 16.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 16.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 25.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 25.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 25.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 25.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 50.0,
+      "review_catch_rate": 0.3,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 50.0,
+      "review_catch_rate": 0.5,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 50.0,
+      "review_catch_rate": 0.7,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    },
+    {
+      "review_cost": 50.0,
+      "review_catch_rate": 0.9,
+      "review_band_open": false,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "two_threshold_cost": 5740.88,
+      "single_threshold_cost": 5740.88,
+      "review_band_saving": 0.0
+    }
+  ],
+  "policy": {
+    "fitted_on": "validation (test) window",
+    "cost_model": {
+      "fraud_loss_ratio": 1.0,
+      "review_cost": 8.0,
+      "decline_friction_cost": 25.0,
+      "min_review_amount": 5.0,
+      "review_catch_rate": 0.7,
+      "max_review_rate": 0.02
+    },
+    "two_threshold": {
+      "review_threshold": 0.12179487179487179,
+      "decline_threshold": 0.12179487179487179,
+      "expected_cost": 5740.88,
+      "cost_per_10k": 1275.75,
+      "loss_approved_fraud": 1965.88,
+      "review_operating_cost": 0.0,
+      "decline_friction_cost": 3775.0,
+      "n_approved": 44720,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "fraud_approved": 25,
+      "fraud_reviewed": 0,
+      "fraud_declined": 129,
+      "legitimate_reviewed": 0,
+      "legitimate_declined": 151,
+      "review_rate": 0.0,
+      "decline_rate": 0.006222,
+      "review_capacity_binding": false
+    },
+    "single_threshold": {
+      "review_threshold": 0.12179487179487179,
+      "decline_threshold": 0.12179487179487179,
+      "expected_cost": 5740.88,
+      "cost_per_10k": 1275.75,
+      "loss_approved_fraud": 1965.88,
+      "review_operating_cost": 0.0,
+      "decline_friction_cost": 3775.0,
+      "n_approved": 44720,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "fraud_approved": 25,
+      "fraud_reviewed": 0,
+      "fraud_declined": 129,
+      "legitimate_reviewed": 0,
+      "legitimate_declined": 151,
+      "review_rate": 0.0,
+      "decline_rate": 0.006222,
+      "review_capacity_binding": false
+    },
+    "out_of_time_outcome": {
+      "expected_cost": 5561.47,
+      "cost_per_10k": 1235.85,
+      "cost_as_pct_of_processed_amount": 0.137,
+      "loss_approved_fraud": 2461.47,
+      "review_operating_cost": 0.0,
+      "decline_friction_cost": 3100.0,
+      "n_approved": 44721,
+      "n_reviewed": 0,
+      "n_declined": 280,
+      "review_rate": 0.0,
+      "decline_rate": 0.006222,
+      "fraud_caught": 156,
+      "fraud_total": 185,
+      "fraud_capture_rate": 0.8432,
+      "false_positive_rate": 0.002767,
+      "value_saved_vs_approve_all": 17925.21
+    },
+    "approve_all_baseline": {
+      "expected_cost": 20386.68,
+      "cost_per_10k": 4530.27,
+      "cost_as_pct_of_processed_amount": 0.5021
+    },
+    "comparison": [
+      {
+        "policy": "approve everything (baseline)",
+        "expected_cost": 20386.68,
+        "cost_per_10k": 4530.27,
+        "cost_as_pct_of_processed_amount": 0.5021,
+        "review_rate": 0.0,
+        "decline_rate": 0.0,
+        "fraud_capture_rate": 0.0,
+        "loss_approved_fraud": null,
+        "review_operating_cost": null,
+        "decline_friction_cost": null,
+        "n_approved": null,
+        "n_reviewed": null,
+        "n_declined": null,
+        "fraud_caught": null,
+        "fraud_total": null,
+        "false_positive_rate": null,
+        "value_saved_vs_approve_all": null
+      },
+      {
+        "policy": "fixed 0.5 threshold",
+        "expected_cost": 14994.03,
+        "cost_per_10k": 3331.93,
+        "cost_as_pct_of_processed_amount": 0.3693,
+        "review_rate": 0.0,
+        "decline_rate": 0.0018,
+        "fraud_capture_rate": 0.3135,
+        "loss_approved_fraud": 14419.03,
+        "review_operating_cost": 0.0,
+        "decline_friction_cost": 575.0,
+        "n_approved": 44920.0,
+        "n_reviewed": 0.0,
+        "n_declined": 81.0,
+        "fraud_caught": 58.0,
+        "fraud_total": 185.0,
+        "false_positive_rate": 0.000513,
+        "value_saved_vs_approve_all": 5967.65
+      },
+      {
+        "policy": "single threshold fitted on validation",
+        "expected_cost": 5561.47,
+        "cost_per_10k": 1235.85,
+        "cost_as_pct_of_processed_amount": 0.137,
+        "review_rate": 0.0,
+        "decline_rate": 0.006222,
+        "fraud_capture_rate": 0.8432,
+        "loss_approved_fraud": 2461.47,
+        "review_operating_cost": 0.0,
+        "decline_friction_cost": 3100.0,
+        "n_approved": 44721.0,
+        "n_reviewed": 0.0,
+        "n_declined": 280.0,
+        "fraud_caught": 156.0,
+        "fraud_total": 185.0,
+        "false_positive_rate": 0.002767,
+        "value_saved_vs_approve_all": 17925.21
+      },
+      {
+        "policy": "two-threshold policy fitted on validation",
+        "expected_cost": 5561.47,
+        "cost_per_10k": 1235.85,
+        "cost_as_pct_of_processed_amount": 0.137,
+        "review_rate": 0.0,
+        "decline_rate": 0.006222,
+        "fraud_capture_rate": 0.8432,
+        "loss_approved_fraud": 2461.47,
+        "review_operating_cost": 0.0,
+        "decline_friction_cost": 3100.0,
+        "n_approved": 44721.0,
+        "n_reviewed": 0.0,
+        "n_declined": 280.0,
+        "fraud_caught": 156.0,
+        "fraud_total": 185.0,
+        "false_positive_rate": 0.002767,
+        "value_saved_vs_approve_all": 17925.21
+      }
+    ]
+  },
+  "drift": {
+    "score_drift": {
+      "psi": 10.5737,
+      "verdict": "retrain",
+      "ks_statistic": 0.9315,
+      "ks_pvalue": 0.0,
+      "reference_mean_score": 0.001948,
+      "actual_mean_score": 0.003311,
+      "reference_flag_rate": 0.001622,
+      "actual_flag_rate": 0.0018
+    },
+    "top_drifting_features": [
+      {
+        "feature": "TransactionID",
+        "psi": 12.4339,
+        "verdict": "retrain",
+        "ks_statistic": 1.0,
+        "ks_pvalue": 0.0,
+        "reference_mean": 232500.5,
+        "actual_mean": 277501.0
+      },
+      {
+        "feature": "time_rank",
+        "psi": 12.4339,
+        "verdict": "retrain",
+        "ks_statistic": 1.0,
+        "ks_pvalue": 0.0,
+        "reference_mean": 232500.5,
+        "actual_mean": 277501.0
+      },
+      {
+        "feature": "TransactionDT",
+        "psi": 12.4339,
+        "verdict": "retrain",
+        "ks_statistic": 1.0,
+        "ks_pvalue": 0.0,
+        "reference_mean": 1526957393.1633,
+        "actual_mean": 1529320092.0298
+      },
+      {
+        "feature": "email_txn_count_past",
+        "psi": 5.478,
+        "verdict": "retrain",
+        "ks_statistic": 0.5801,
+        "ks_pvalue": 0.0,
+        "reference_mean": 80633.5508,
+        "actual_mean": 96750.9076
+      },
+      {
+        "feature": "device_txn_count_past",
+        "psi": 4.2968,
+        "verdict": "retrain",
+        "ks_statistic": 0.4095,
+        "ks_pvalue": 0.0,
+        "reference_mean": 10068.1676,
+        "actual_mean": 12061.0484
+      },
+      {
+        "feature": "device_distinct_card_past",
+        "psi": 4.2164,
+        "verdict": "retrain",
+        "ks_statistic": 0.4089,
+        "ks_pvalue": 0.0,
+        "reference_mean": 3637.9497,
+        "actual_mean": 3988.9742
+      },
+      {
+        "feature": "days_since_first_seen",
+        "psi": 3.4999,
+        "verdict": "retrain",
+        "ks_statistic": 0.821,
+        "ks_pvalue": 0.0,
+        "reference_mean": 134.8801,
+        "actual_mean": 162.1703
+      },
+      {
+        "feature": "device_hist_fraud_rate",
+        "psi": 1.8438,
+        "verdict": "retrain",
+        "ks_statistic": 0.3823,
+        "ks_pvalue": 0.0,
+        "reference_mean": 0.0059,
+        "actual_mean": 0.0062
+      },
+      {
+        "feature": "addr_txn_count_past",
+        "psi": 0.126,
+        "verdict": "watch",
+        "ks_statistic": 0.0892,
+        "ks_pvalue": 0.0,
+        "reference_mean": 760.032,
+        "actual_mean": 904.5701
+      },
+      {
+        "feature": "card_hist_txn_count",
+        "psi": 0.0574,
+        "verdict": "stable",
+        "ks_statistic": 0.0802,
+        "ks_pvalue": 0.0,
+        "reference_mean": 367.0372,
+        "actual_mean": 502.7035
+      },
+      {
+        "feature": "addr_hist_fraud_rate",
+        "psi": 0.0454,
+        "verdict": "stable",
+        "ks_statistic": 0.0869,
+        "ks_pvalue": 0.0,
+        "reference_mean": 0.002,
+        "actual_mean": 0.0021
+      },
+      {
+        "feature": "card_txn_seq",
+        "psi": 0.024,
+        "verdict": "stable",
+        "ks_statistic": 0.0509,
+        "ks_pvalue": 0.0,
+        "reference_mean": 642.8805,
+        "actual_mean": 783.1464
+      },
+      {
+        "feature": "card_txn_count_past",
+        "psi": 0.024,
+        "verdict": "stable",
+        "ks_statistic": 0.0509,
+        "ks_pvalue": 0.0,
+        "reference_mean": 641.8805,
+        "actual_mean": 782.1464
+      },
+      {
+        "feature": "card_distinct_addr_past",
+        "psi": 0.023,
+        "verdict": "stable",
+        "ks_statistic": 0.0503,
+        "ks_pvalue": 0.0,
+        "reference_mean": 138.5294,
+        "actual_mean": 149.7193
+      },
+      {
+        "feature": "card_amt_mean_past",
+        "psi": 0.0095,
+        "verdict": "stable",
+        "ks_statistic": 0.0331,
+        "ks_pvalue": 0.0,
+        "reference_mean": 85.8581,
+        "actual_mean": 86.3385
+      }
+    ],
+    "features_actionable": 8,
+    "retrain_recommended": true,
+    "thresholds": {
+      "psi_watch": 0.1,
+      "psi_action": 0.25
+    }
+  },
+  "top_features_shap": [
+    {
+      "feature": "days_since_first_seen",
+      "mean_abs_shap": 0.43771375114693284,
+      "mean_shap": -0.4189997318964132,
+      "max_abs_shap": 1.377720403338953,
+      "share_of_total": 0.103589
+    },
+    {
+      "feature": "addr_txn_count_past",
+      "mean_abs_shap": 0.39111532201259047,
+      "mean_shap": -0.03254188121410919,
+      "max_abs_shap": 2.3845352551416252,
+      "share_of_total": 0.092561
+    },
+    {
+      "feature": "email_txn_count_past",
+      "mean_abs_shap": 0.22004230277201,
+      "mean_shap": -0.10066314840397399,
+      "max_abs_shap": 1.779783747874611,
+      "share_of_total": 0.052075
+    },
+    {
+      "feature": "card_hours_since_prev",
+      "mean_abs_shap": 0.21924005298867982,
+      "mean_shap": 0.022645360611256177,
+      "max_abs_shap": 4.150465378305463,
+      "share_of_total": 0.051885
+    },
+    {
+      "feature": "mismatch_count",
+      "mean_abs_shap": 0.20632169800007502,
+      "mean_shap": 0.00208371775450201,
+      "max_abs_shap": 3.0339779659329045,
+      "share_of_total": 0.048828
+    },
+    {
+      "feature": "card1_freq_code",
+      "mean_abs_shap": 0.205492912494024,
+      "mean_shap": 0.027528477119195878,
+      "max_abs_shap": 3.6137161244181284,
+      "share_of_total": 0.048632
+    },
+    {
+      "feature": "addr_hist_fraud_rate",
+      "mean_abs_shap": 0.1997188978554987,
+      "mean_shap": -0.0812772037421727,
+      "max_abs_shap": 1.0509903584751368,
+      "share_of_total": 0.047265
+    },
+    {
+      "feature": "card_amt_zscore_past",
+      "mean_abs_shap": 0.19664609079604406,
+      "mean_shap": 0.041641902483759985,
+      "max_abs_shap": 1.1423599543461826,
+      "share_of_total": 0.046538
+    },
+    {
+      "feature": "dist1_log",
+      "mean_abs_shap": 0.18614275716547926,
+      "mean_shap": -0.003476407612706686,
+      "max_abs_shap": 2.10490609306592,
+      "share_of_total": 0.044052
+    },
+    {
+      "feature": "hour_of_day",
+      "mean_abs_shap": 0.16579176887166527,
+      "mean_shap": 0.00925118950578013,
+      "max_abs_shap": 1.6933033684991834,
+      "share_of_total": 0.039236
+    },
+    {
+      "feature": "TransactionAmt",
+      "mean_abs_shap": 0.1656518866313516,
+      "mean_shap": 0.0051472073448557525,
+      "max_abs_shap": 1.937303142042017,
+      "share_of_total": 0.039203
+    },
+    {
+      "feature": "TransactionAmt_log",
+      "mean_abs_shap": 0.12806724243892312,
+      "mean_shap": 0.003949819948388133,
+      "max_abs_shap": 0.699437950859449,
+      "share_of_total": 0.030308
+    }
+  ],
+  "warehouse": {
+    "data_quality": 22,
+    "fct_transaction_features": 300001,
+    "feature_governance": 16,
+    "mart_features": 300001,
+    "mart_features_vendor": 300001,
+    "mart_split_summary": 3,
+    "raw_identity": 67080,
+    "raw_transactions": 300001,
+    "stg_identity": 67080,
+    "stg_transactions": 300001
+  }
+}

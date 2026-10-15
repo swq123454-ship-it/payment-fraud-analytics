@@ -1,0 +1,5 @@
+policy,expected_cost,cost_per_10k,cost_as_pct_of_processed_amount,review_rate,decline_rate,fraud_capture_rate,loss_approved_fraud,review_operating_cost,decline_friction_cost,n_approved,n_reviewed,n_declined,fraud_caught,fraud_total,false_positive_rate,value_saved_vs_approve_all
+approve everything (baseline),20386.68,4530.27,0.5021,0.0,0.0,0.0,,,,,,,,,,
+fixed 0.5 threshold,14994.03,3331.93,0.3693,0.0,0.0018,0.3135,14419.03,0.0,575.0,44920.0,0.0,81.0,58.0,185.0,0.000513,5967.65
+single threshold fitted on validation,5561.47,1235.85,0.137,0.0,0.006222,0.8432,2461.47,0.0,3100.0,44721.0,0.0,280.0,156.0,185.0,0.002767,17925.21
+two-threshold policy fitted on validation,5561.47,1235.85,0.137,0.0,0.006222,0.8432,2461.47,0.0,3100.0,44721.0,0.0,280.0,156.0,185.0,0.002767,17925.21

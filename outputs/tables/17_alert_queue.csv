@@ -1,0 +1,11 @@
+rank,score,amount,actual_fraud,top_driver_1,top_driver_2,top_driver_3
+1,0.6667,138.78,1,card1_freq_code=0.0374 (+3.43),mismatch_count=6 (+2.83),email_txn_count_past=1.22e+03 (+1.14)
+2,0.6667,66.1,0,card1_freq_code=0.0374 (+3.54),mismatch_count=5 (+2.61),email_txn_count_past=1.33e+03 (+1.31)
+3,0.6667,218.17,0,card1_freq_code=0.0374 (+3.53),mismatch_count=5 (+2.89),email_txn_count_past=2.66e+03 (+1.08)
+4,0.6425,2.5,0,card_hours_since_prev=0 (+3.40),card1_freq_code=0.0374 (+2.19),email_txn_count_past=1.21e+03 (+1.33)
+5,0.6274,83.72,0,card_hours_since_prev=0 (+3.31),mismatch_count=6 (+2.07),card1_freq_code=0.0374 (+1.65)
+6,0.6189,121.88,1,card_hours_since_prev=0 (+3.18),card1_freq_code=0.0374 (+1.70),mismatch_count=4 (+1.29)
+7,0.6121,356.12,1,card1_freq_code=0.0374 (+3.44),mismatch_count=4 (+1.70),card_amt_sum_24h=9.11e+03 (+1.14)
+8,0.5882,154.36,1,card1_freq_code=0.0374 (+3.00),mismatch_count=5 (+1.91),addr_txn_count_past=missing (+1.17)
+9,0.5882,2.6,0,card1_freq_code=0.0374 (+3.36),mismatch_count=4 (+2.13),email_txn_count_past=1.13e+03 (+1.65)
+10,0.5882,1.74,1,card1_freq_code=0.0374 (+2.99),mismatch_count=5 (+2.30),addr_txn_count_past=missing (+1.41)

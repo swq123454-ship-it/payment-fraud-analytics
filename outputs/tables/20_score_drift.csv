@@ -1,0 +1,2 @@
+psi,verdict,ks_statistic,ks_pvalue,reference_mean_score,actual_mean_score,reference_flag_rate,actual_flag_rate
+10.5737,retrain,0.9315,0.0,0.001948,0.003311,0.001622,0.0018

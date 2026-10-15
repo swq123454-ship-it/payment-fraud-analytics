@@ -1,0 +1,5 @@
+model,test_pr_auc,test_roc_auc,oot_pr_auc,oot_roc_auc,oot_ks,oot_pr_auc_ci_low,oot_pr_auc_ci_high
+lightgbm,0.4614,0.9596,0.6044,0.95,0.8927,0.5166,0.691
+logistic_regression,0.4427,0.9625,0.5879,0.95,0.8813,,
+isolation_forest,0.1458,0.9256,0.2221,0.9567,0.8694,,
+autoencoder,0.1047,0.928,0.1838,0.9579,0.8484,,

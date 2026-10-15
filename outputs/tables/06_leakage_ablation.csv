@@ -1,0 +1,9 @@
+variant,resampling_placement,fold_protocol,mean_pr_auc
+A_resample_before_split_random_folds,"whole window, before folding",random stratified 5-fold,0.9948
+B_resample_inside_fold_random_folds,inside each fold,random stratified 5-fold,0.4884
+C_resample_inside_fold_time_folds,inside each fold,"forward-chaining, 4 folds",0.4899
+D_no_resampling_time_folds,none,"forward-chaining, 4 folds",0.443
+A_minus_B_resampling_placement_effect,-,"where the resampling happened, folds held fixed",0.5065
+B_minus_C_random_vs_time_fold_effect,-,"the fold protocol, resampling placement held fixed",-0.0015
+A_minus_C_total_optimism,-,what a typical tutorial would report,0.505
+C_minus_D_value_of_resampling,-,what the resampling machinery is worth,0.0469

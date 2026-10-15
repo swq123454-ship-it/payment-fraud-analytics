@@ -1,0 +1,2 @@
+window,expected_cost,cost_per_10k,cost_as_pct_of_processed_amount,loss_approved_fraud,review_operating_cost,decline_friction_cost,n_approved,n_reviewed,n_declined,review_rate,decline_rate,fraud_caught,fraud_total,fraud_capture_rate,false_positive_rate,value_saved_vs_approve_all
+out-of-time,5561.47,1235.85,0.137,2461.47,0.0,3100.0,44721,0,280,0.0,0.006222,156,185,0.8432,0.002767,17925.21
