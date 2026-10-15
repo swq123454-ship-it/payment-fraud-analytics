@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint
+        run: python -m ruff check src scripts tests
+
+      - name: Run tests
+        run: python -m pytest -v
+
+      # The pipeline is exercised on a reduced extract so the job finishes in a
+      # few minutes while still building the warehouse, fitting every model and
+      # rendering every figure. A pipeline that only passes the unit tests is a
+      # pipeline nobody has run.
+      - name: Run the pipeline end to end
+        run: python scripts/run_pipeline.py --transactions 30000
+
+      - name: Upload artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: outputs-py${{ matrix.python-version }}
+          path: |
+            outputs/figures/*.png
+            outputs/tables/*.csv
+            outputs/metrics.json
+            outputs/RESULTS.md
+          if-no-files-found: warn

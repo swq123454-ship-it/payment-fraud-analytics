@@ -1,0 +1,49 @@
+# Data and model artefacts, never committed
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+*.db
+*.sqlite
+*.sqlite3
+*.joblib
+*.pkl
+
+# The trained model bundle. Binary, reproducible, and the one artefact that is
+# genuinely awkward to review - it goes out.
+outputs/model/
+
+# Everything else under outputs/ IS committed, including the tables and
+# metrics.json. Total size is about 150 KB, and the payoff is that a reviewer can
+# read RESULTS.md, open the CSVs behind it, and check every number the README
+# quotes without cloning and running a nine-minute pipeline first. A claim in a
+# README that cannot be checked from the repository is a claim, not evidence.
+# Same reasoning for the figures below.
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Tooling
+.pytest_cache/
+.pytest_tmp/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
