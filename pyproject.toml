@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "payment-fraud-analytics"
 version = "1.0.0"
 description = "Cost-sensitive payment fraud detection with causal SQL features, imbalance-aware modelling and SHAP explanation"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dynamic = ["dependencies"]
 
 [project.optional-dependencies]
