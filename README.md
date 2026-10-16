@@ -1,5 +1,11 @@
 # Payment Fraud Analytics
 
+![tests](https://img.shields.io/badge/tests-127_passing-brightgreen)
+
+![python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+
+![license](https://img.shields.io/badge/license-MIT-lightgrey)
+
 Cost-sensitive detection of card-not-present payment fraud: causal SQL features
 built in a warehouse, an imbalance study that measures its own optimism, a
 cost-optimal three-way decision rule, and per-transaction SHAP attribution
