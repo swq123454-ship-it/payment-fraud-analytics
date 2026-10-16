@@ -132,9 +132,7 @@ def permutation_table(
             values = series.to_numpy(copy=True)
             rng.shuffle(values)
             shuffled = X.copy()
-            shuffled[column] = (
-                pd.Categorical(values, categories=categories) if is_categorical else values
-            )
+            shuffled[column] = pd.Categorical(values, categories=categories) if is_categorical else values
             score = float(average_precision_score(y, model.predict_proba(shuffled)[:, 1]))
             deltas.append(baseline - score)
         rows.append(
@@ -179,11 +177,7 @@ def case_attribution(
     )
     table["abs_contribution"] = table["shap_contribution"].abs()
     table["direction"] = np.where(table["shap_contribution"] > 0, "increases risk", "decreases risk")
-    return (
-        table.sort_values("abs_contribution", ascending=False)
-        .head(top_k)
-        .reset_index(drop=True)
-    )
+    return table.sort_values("abs_contribution", ascending=False).head(top_k).reset_index(drop=True)
 
 
 def _render_value(value) -> str:
@@ -253,7 +247,4 @@ def _driver(explainer: ShapExplainer, frame: pd.DataFrame, position: int) -> str
     if position >= len(attribution):
         return ""
     entry = attribution.iloc[position]
-    return (
-        f"{entry['feature']}={_render_value(entry['value'])} "
-        f"({entry['shap_contribution']:+.2f})"
-    )
+    return f"{entry['feature']}={_render_value(entry['value'])} ({entry['shap_contribution']:+.2f})"

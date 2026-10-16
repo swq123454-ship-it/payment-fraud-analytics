@@ -79,12 +79,8 @@ def test_score_drift_reports_both_psi_and_ks():
 
 def test_feature_drift_table_ranks_the_shifted_feature_first():
     rng = np.random.default_rng(5)
-    reference = pd.DataFrame(
-        {"stable": rng.normal(size=8_000), "moving": rng.normal(size=8_000), "constant": 1.0}
-    )
-    actual = pd.DataFrame(
-        {"stable": rng.normal(size=8_000), "moving": rng.normal(1.2, 1.0, 8_000), "constant": 1.0}
-    )
+    reference = pd.DataFrame({"stable": rng.normal(size=8_000), "moving": rng.normal(size=8_000), "constant": 1.0})
+    actual = pd.DataFrame({"stable": rng.normal(size=8_000), "moving": rng.normal(1.2, 1.0, 8_000), "constant": 1.0})
     table = feature_drift_table(reference, actual)
     assert table["feature"].iloc[0] == "moving"
     # A constant column carries no information and must be skipped.
@@ -124,9 +120,7 @@ def fitted():
             "category": pd.Categorical(rng.choice(["a", "b", "c"], n)),
         }
     )
-    model = fit_lightgbm(
-        frame, y, params={"n_estimators": 80, "num_leaves": 15, "min_child_samples": 40}
-    )
+    model = fit_lightgbm(frame, y, params={"n_estimators": 80, "num_leaves": 15, "min_child_samples": 40})
     return model, frame, y
 
 

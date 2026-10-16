@@ -186,10 +186,7 @@ def compare_sampling_strategies(
             }
         )
         if verbose:
-            print(
-                f"  [sampling] {name:<26} PR-AUC {rows[-1]['mean_pr_auc']:.4f}"
-                f"  rows {rows[-1]['mean_train_rows']:,}"
-            )
+            print(f"  [sampling] {name:<26} PR-AUC {rows[-1]['mean_pr_auc']:.4f}  rows {rows[-1]['mean_train_rows']:,}")
 
     return pd.DataFrame(rows).sort_values("mean_pr_auc", ascending=False).reset_index(drop=True)
 
@@ -266,15 +263,27 @@ def sampling_leakage_ablation(
 
     honest_resampled = [
         _evaluate_fold(
-            X[f.train_index], y[f.train_index], X[f.valid_index], y[f.valid_index],
-            strategy, ratio, seed, cfg.RESAMPLING_STUDY_PARAMS,
+            X[f.train_index],
+            y[f.train_index],
+            X[f.valid_index],
+            y[f.valid_index],
+            strategy,
+            ratio,
+            seed,
+            cfg.RESAMPLING_STUDY_PARAMS,
         )["pr_auc"]
         for f in folds
     ]
     honest_plain = [
         _evaluate_fold(
-            X[f.train_index], y[f.train_index], X[f.valid_index], y[f.valid_index],
-            baseline, None, seed, cfg.RESAMPLING_STUDY_PARAMS,
+            X[f.train_index],
+            y[f.train_index],
+            X[f.valid_index],
+            y[f.valid_index],
+            baseline,
+            None,
+            seed,
+            cfg.RESAMPLING_STUDY_PARAMS,
         )["pr_auc"]
         for f in folds
     ]
@@ -283,9 +292,7 @@ def sampling_leakage_ablation(
         "A_resample_before_split_random_folds": _random_fold_scores(
             X, y, strategy, ratio, seed, position="before_split"
         ),
-        "B_resample_inside_fold_random_folds": _random_fold_scores(
-            X, y, strategy, ratio, seed, position="inside_fold"
-        ),
+        "B_resample_inside_fold_random_folds": _random_fold_scores(X, y, strategy, ratio, seed, position="inside_fold"),
         "C_resample_inside_fold_time_folds": float(np.mean(honest_resampled)),
         "D_no_resampling_time_folds": float(np.mean(honest_plain)),
     }

@@ -140,18 +140,12 @@ def ranking_metrics(
         "ks": round(ks_statistic(y_true, score), 4),
         "brier": round(float(brier_score_loss(y_true, np.clip(score, 0, 1))), 6),
         "pr_auc_baseline": round(float(y_true.mean()), 6),
-        "recall_at_capacity": {
-            f"{c:.3%}": round(recall_at_capacity(y_true, score, c), 4) for c in capacities
-        },
-        "precision_at_capacity": {
-            f"{c:.3%}": round(precision_at_capacity(y_true, score, c), 4) for c in capacities
-        },
+        "recall_at_capacity": {f"{c:.3%}": round(recall_at_capacity(y_true, score, c), 4) for c in capacities},
+        "precision_at_capacity": {f"{c:.3%}": round(precision_at_capacity(y_true, score, c), 4) for c in capacities},
         # Lift is the number a fraud manager repeats back: "the queue is N times
         # denser in fraud than a random sample of the same size". Reported so
         # that it is read off the pipeline rather than divided by hand.
-        "lift_at_capacity": {
-            f"{c:.3%}": round(lift_at_capacity(y_true, score, c), 2) for c in capacities
-        },
+        "lift_at_capacity": {f"{c:.3%}": round(lift_at_capacity(y_true, score, c), 2) for c in capacities},
     }
     if with_interval:
         mean, low, high = bootstrap_pr_auc(y_true, score, seed=seed)
@@ -254,9 +248,7 @@ class Policy:
     review_capacity_binding: bool = False
 
 
-def _score_groups(
-    y_true: np.ndarray, amount: np.ndarray, score: np.ndarray, cost_model=None
-) -> dict:
+def _score_groups(y_true: np.ndarray, amount: np.ndarray, score: np.ndarray, cost_model=None) -> dict:
     """Collapse the book into its distinct score values, with prefix sums.
 
     Cuts are taken **between distinct scores**, never between two rows that share
@@ -438,12 +430,7 @@ def _constrained_two_threshold(data: dict, window: int, cost_model=None) -> tupl
         if not queue:
             continue
         second = queue[0]
-        candidate = (
-            prefix_loss[first]
-            - prefix_band[first]
-            + suffix_term[second]
-            + total_legit * friction
-        )
+        candidate = prefix_loss[first] - prefix_band[first] + suffix_term[second] + total_legit * friction
         if candidate < best_cost:
             best_cost = float(candidate)
             best_pair = (first, second)
@@ -634,9 +621,7 @@ def policy_outcome(
         "fraud_total": total_fraud,
         "fraud_capture_rate": round(caught / max(total_fraud, 1), 4),
         "false_positive_rate": round(float(declined_mask[~y_true.astype(bool)].mean()), 6),
-        "value_saved_vs_approve_all": round(
-            float((amount * y_true).sum()) - loss, 2
-        ),
+        "value_saved_vs_approve_all": round(float((amount * y_true).sum()) - loss, 2),
     }
 
 

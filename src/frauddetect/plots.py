@@ -89,16 +89,16 @@ def _model_colours(n: int) -> tuple[str, ...]:
 # ---------------------------------------------------------------------------
 def plot_pr_curves(curves: dict[str, pd.DataFrame], summary: pd.DataFrame, base_rate: float) -> Path:
     fig, ax = plt.subplots(figsize=(6.6, 4.4))
-    for (name, frame), colour in zip(
-        curves.items(), _model_colours(len(curves)), strict=True
-    ):
+    for (name, frame), colour in zip(curves.items(), _model_colours(len(curves)), strict=True):
         pr_auc = summary.loc[summary["model"] == name, "pr_auc"]
         label = f"{name} (PR-AUC {float(pr_auc.iloc[0]):.3f})" if len(pr_auc) else name
         ax.plot(frame["recall"], frame["precision"], color=colour, lw=1.8, label=label)
     ax.axhline(base_rate, color=MUTED, ls="--", lw=1.1, label=f"random baseline ({base_rate:.3%})")
     ax.set_xlabel("Recall - share of fraud caught")
     ax.set_ylabel("Precision - share of alerts that are fraud")
-    ax.set_title("Precision-recall curves, out-of-time window\nAt a 0.35% base rate, ROC-AUC is flattering and PR-AUC is not")
+    ax.set_title(
+        "Precision-recall curves, out-of-time window\nAt a 0.35% base rate, ROC-AUC is flattering and PR-AUC is not"
+    )
     ax.set_xlim(0, 1.02)
     ax.set_ylim(0, 1.02)
     ax.legend(loc="upper right")
@@ -107,9 +107,7 @@ def plot_pr_curves(curves: dict[str, pd.DataFrame], summary: pd.DataFrame, base_
 
 def plot_roc_curves(curves: dict[str, pd.DataFrame], summary: pd.DataFrame) -> Path:
     fig, ax = plt.subplots(figsize=(5.6, 4.4))
-    for (name, frame), colour in zip(
-        curves.items(), _model_colours(len(curves)), strict=True
-    ):
+    for (name, frame), colour in zip(curves.items(), _model_colours(len(curves)), strict=True):
         roc_auc = summary.loc[summary["model"] == name, "roc_auc"]
         label = f"{name} (AUC {float(roc_auc.iloc[0]):.3f})" if len(roc_auc) else name
         ax.plot(frame["false_positive_rate"], frame["true_positive_rate"], color=colour, lw=1.8, label=label)
@@ -145,7 +143,9 @@ def plot_calibration(table_before: pd.DataFrame, table_after: pd.DataFrame) -> P
         ax.plot(table["mean_predicted"], table["observed_rate"], "o-", color=colour, lw=1.6, ms=4.5, label=label)
     ax.set_xlabel("Mean predicted fraud probability")
     ax.set_ylabel("Observed fraud rate")
-    ax.set_title("Calibration on the out-of-time window\nThresholds chosen on miscalibrated scores are wrong by the same factor")
+    ax.set_title(
+        "Calibration on the out-of-time window\nThresholds chosen on miscalibrated scores are wrong by the same factor"
+    )
     ax.legend(loc="upper left")
     return _save(fig, "03_calibration.png", SOURCE)
 
@@ -153,7 +153,13 @@ def plot_calibration(table_before: pd.DataFrame, table_after: pd.DataFrame) -> P
 def plot_cost_curve(table: pd.DataFrame, optimal_threshold: float) -> Path:
     fig, ax = plt.subplots(figsize=(6.6, 4.2))
     ax.plot(table["threshold"], table["approved_fraud_loss"], color=ACCENT, lw=1.7, label="loss on approved fraud")
-    ax.plot(table["threshold"], table["decline_friction"], color=ACCENT_2, lw=1.7, label="friction from declined legitimate traffic")
+    ax.plot(
+        table["threshold"],
+        table["decline_friction"],
+        color=ACCENT_2,
+        lw=1.7,
+        label="friction from declined legitimate traffic",
+    )
     ax.plot(table["threshold"], table["total_cost"], color=FG, lw=2.2, label="total expected cost")
     if np.isfinite(optimal_threshold):
         ax.axvline(optimal_threshold, color=ACCENT_3, ls=":", lw=1.5)
@@ -188,7 +194,9 @@ def plot_cost_surface(grid: pd.DataFrame, review_threshold: float, decline_thres
         ax.plot(decline_threshold, review_threshold, marker="*", ms=14, color=ACCENT, mec="white", mew=1.0)
     ax.set_xlabel("Decline threshold")
     ax.set_ylabel("Review threshold")
-    ax.set_title("Two-threshold policy cost surface\nAuto-declining customers costs more than reviewing them, so a middle band exists")
+    ax.set_title(
+        "Two-threshold policy cost surface\nAuto-declining customers costs more than reviewing them, so a middle band exists"
+    )
     return _save(fig, "05_cost_surface_two_thresholds.png", SOURCE)
 
 
@@ -208,7 +216,9 @@ def plot_recall_at_capacity(summary: pd.DataFrame, capacities: tuple[float, ...]
     ax.set_xlabel("Share of transactions reviewed (fixed analyst capacity)")
     ax.set_ylabel("Share of fraud caught")
     ax.set_ylim(0, 1.12)
-    ax.set_title("Recall at fixed review capacity, out-of-time window\nThe metric an operations team plans headcount against")
+    ax.set_title(
+        "Recall at fixed review capacity, out-of-time window\nThe metric an operations team plans headcount against"
+    )
     ax.legend(loc="upper left", ncols=2)
     return _save(fig, "06_recall_at_capacity.png", SOURCE)
 
@@ -230,7 +240,9 @@ def plot_sampling_comparison(table: pd.DataFrame) -> Path:
         )
     ax.axvline(ordered["mean_pr_auc"].iloc[0] * 0 + best, color=GRID, lw=0.8)
     ax.set_xlabel("Mean PR-AUC across forward-chaining folds")
-    ax.set_title("Resampling policies compared, with resampling applied inside each fold\nUndersampling throws away 97% of the data and the loss is visible")
+    ax.set_title(
+        "Resampling policies compared, with resampling applied inside each fold\nUndersampling throws away 97% of the data and the loss is visible"
+    )
     ax.set_xlim(0, max(ordered["mean_pr_auc"]) * 1.42)
     return _save(fig, "07_sampling_comparison.png", SOURCE)
 
@@ -263,8 +275,7 @@ def plot_shap_global(table: pd.DataFrame, top_k: int = 15) -> Path:
     ax.barh(top["feature"], top["mean_abs_shap"], color=colours, alpha=0.9)
     ax.set_xlabel("Mean |SHAP contribution| to the model's log-odds")
     ax.set_title(
-        "Global feature attribution (exact TreeSHAP)\n"
-        "Red = pushes scores up on average, blue = pushes them down"
+        "Global feature attribution (exact TreeSHAP)\nRed = pushes scores up on average, blue = pushes them down"
     )
     return _save(fig, "09_shap_global.png", SOURCE)
 
@@ -274,7 +285,9 @@ def plot_shap_case(attribution: pd.DataFrame, score: float, title: str, name: st
     fig, ax = plt.subplots(figsize=(7.0, 3.9))
     colours = [ACCENT if value > 0 else ACCENT_2 for value in ordered["shap_contribution"]]
     labels = [
-        f"{row['feature']} = {row['value']:.3g}" if isinstance(row["value"], (int, float, np.floating)) else f"{row['feature']} = {row['value']}"
+        f"{row['feature']} = {row['value']:.3g}"
+        if isinstance(row["value"], (int, float, np.floating))
+        else f"{row['feature']} = {row['value']}"
         for _, row in ordered.iterrows()
     ]
     ax.barh(labels, ordered["shap_contribution"], color=colours)
@@ -302,7 +315,15 @@ def plot_psi_heatmap(table: pd.DataFrame, top_k: int = 15) -> Path:
 
 def plot_monthly_stability(table: pd.DataFrame) -> Path:
     fig, ax = plt.subplots(figsize=(6.8, 3.9))
-    ax.plot(table["month"], table["psi_vs_first_month"], "o-", color=ACCENT_2, lw=1.7, ms=4.5, label="score PSI vs first month")
+    ax.plot(
+        table["month"],
+        table["psi_vs_first_month"],
+        "o-",
+        color=ACCENT_2,
+        lw=1.7,
+        ms=4.5,
+        label="score PSI vs first month",
+    )
     ax.axhline(0.10, color="#d68910", ls="--", lw=1.1, label="watch 0.10")
     ax.axhline(0.25, color=ACCENT, ls="--", lw=1.1, label="retrain 0.25")
     ax2 = ax.twinx()
@@ -333,8 +354,7 @@ def plot_amount_vs_score(
     ax.set_xlabel("Transaction amount (currency units, log scale)")
     ax.set_ylabel("Predicted fraud probability")
     ax.set_title(
-        "Score against amount\n"
-        "The sub-3-unit cluster high on the axis is card testing, not noise to be trimmed"
+        "Score against amount\nThe sub-3-unit cluster high on the axis is card testing, not noise to be trimmed"
     )
     ax.legend(loc="upper right")
     return _save(fig, "12_score_vs_amount.png", SOURCE)
@@ -345,7 +365,13 @@ def plot_entity_risk(historical: pd.DataFrame) -> Path:
     groups = historical.dropna(subset=["bucket"])
     ax.bar(groups["bucket"], groups["fraud_rate"], color=ACCENT_2)
     for index, (_, row) in enumerate(groups.iterrows()):
-        ax.text(index, row["fraud_rate"] + 0.0001, f"{row['fraud_rate']:.3%}\nn={int(row['n']):,}", ha="center", fontsize=7.5)
+        ax.text(
+            index,
+            row["fraud_rate"] + 0.0001,
+            f"{row['fraud_rate']:.3%}\nn={int(row['n']):,}",
+            ha="center",
+            fontsize=7.5,
+        )
     ax.set_xlabel("Resolution-lagged card fraud rate bucket (60-day lag)")
     ax.set_ylabel("Observed fraud rate")
     ax.set_title(
@@ -359,8 +385,11 @@ def plot_entity_risk(historical: pd.DataFrame) -> Path:
 def plot_review_band_sensitivity(table: pd.DataFrame) -> Path:
     """Does the manual queue pay for itself, and at what analyst cost does it start to?"""
     fig, ax = plt.subplots(figsize=(7.0, 4.2))
-    for catch, colour in zip(sorted(table["review_catch_rate"].unique(), reverse=True),
-                             _model_colours(table["review_catch_rate"].nunique()), strict=True):
+    for catch, colour in zip(
+        sorted(table["review_catch_rate"].unique(), reverse=True),
+        _model_colours(table["review_catch_rate"].nunique()),
+        strict=True,
+    ):
         subset = table[table["review_catch_rate"] == catch].sort_values("review_cost")
         ax.plot(
             subset["review_cost"],

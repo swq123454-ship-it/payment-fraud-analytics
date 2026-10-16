@@ -128,9 +128,7 @@ class FeaturePrep:
         forbidden = set(cfg.POST_HOC_COLUMNS) | set(cfg.DROP_AFTER_EDA) | {cfg.TARGET_COLUMN, "split"}
         if not self.include_vendor_aggregates:
             forbidden |= set(cfg.VENDOR_AGGREGATE_COLUMNS)
-        self.dropped_columns_ = sorted(
-            c for c in frame.columns if c in forbidden
-        )
+        self.dropped_columns_ = sorted(c for c in frame.columns if c in forbidden)
         return self
 
     # -- transforming ------------------------------------------------------
@@ -145,9 +143,7 @@ class FeaturePrep:
                     np.full(len(derived), "__missing__", dtype=object), categories=vocabulary
                 )
                 continue
-            values = derived[column].astype(object).where(
-                derived[column].notna(), "__missing__"
-            ).astype(str)
+            values = derived[column].astype(object).where(derived[column].notna(), "__missing__").astype(str)
             values = values.where(values.isin(vocabulary), "__rare__")
             encoded[column] = pd.Categorical(values, categories=vocabulary)
         return pd.DataFrame(encoded, index=derived.index)
@@ -159,11 +155,7 @@ class FeaturePrep:
         derived = self._derive(frame)
         # reindex rather than index: an absent column becomes NaN, which the
         # booster reads as missing instead of crashing at scoring time.
-        numeric = (
-            derived.reindex(columns=self.numeric_columns_)
-            .apply(pd.to_numeric, errors="coerce")
-            .astype(float)
-        )
+        numeric = derived.reindex(columns=self.numeric_columns_).apply(pd.to_numeric, errors="coerce").astype(float)
         categorical = self._encode_categoricals(derived)
         return pd.concat([numeric, categorical], axis=1)[self.feature_names]
 
@@ -222,6 +214,5 @@ def assert_no_forbidden_features(feature_names) -> None:
     offending = sorted(forbidden & set(feature_names))
     if offending:
         raise ValueError(
-            "Post-chargeback columns reached the design matrix: "
-            f"{offending}. These are only knowable after the fact."
+            f"Post-chargeback columns reached the design matrix: {offending}. These are only knowable after the fact."
         )

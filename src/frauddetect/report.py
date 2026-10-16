@@ -114,9 +114,7 @@ def run_pipeline(
     # ------------------------------------------------------------------
     if verbose:
         print("[1/9] generating extract and building the SQL warehouse")
-    extract = load_extract(
-        data_mode=data_mode, n_transactions=n_transactions, seed=seed
-    )
+    extract = load_extract(data_mode=data_mode, n_transactions=n_transactions, seed=seed)
     build_warehouse(extract, verbose=verbose)
 
     mart = read_table("mart_features")
@@ -231,9 +229,7 @@ def run_pipeline(
     policy = optimise_policy(y_test, amount_test, score_test, allow_review=True)
     single_policy = optimise_policy(y_test, amount_test, score_test, allow_review=False)
 
-    outcome_oot = policy_outcome(
-        y_oot, amount_oot, score_oot, policy.review_threshold, policy.decline_threshold
-    )
+    outcome_oot = policy_outcome(y_oot, amount_oot, score_oot, policy.review_threshold, policy.decline_threshold)
     outcome_oot_single = policy_outcome(
         y_oot, amount_oot, score_oot, single_policy.decline_threshold, single_policy.decline_threshold
     )
@@ -242,7 +238,10 @@ def run_pipeline(
 
     comparison = pd.DataFrame(
         [
-            _policy_row("approve everything (baseline)", baseline | {"review_rate": 0.0, "decline_rate": 0.0, "fraud_capture_rate": 0.0}),
+            _policy_row(
+                "approve everything (baseline)",
+                baseline | {"review_rate": 0.0, "decline_rate": 0.0, "fraud_capture_rate": 0.0},
+            ),
             _policy_row("fixed 0.5 threshold", outcome_oot_naive),
             _policy_row("single threshold fitted on validation", outcome_oot_single),
             _policy_row("two-threshold policy fitted on validation", outcome_oot),
@@ -281,9 +280,7 @@ def run_pipeline(
     rows = []
     for name in model_scores_test:
         metrics_test = ranking_metrics(y_test, model_scores_test[name])
-        metrics_oot = ranking_metrics(
-            y_oot, model_scores_oot[name], with_interval=(name == "lightgbm")
-        )
+        metrics_oot = ranking_metrics(y_oot, model_scores_oot[name], with_interval=(name == "lightgbm"))
         rows.append(
             {
                 "model": name,
@@ -300,27 +297,26 @@ def run_pipeline(
             }
         )
     performance = pd.DataFrame(rows)
-    _write_table(performance.drop(columns=["recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]), "12_model_performance.csv")
+    _write_table(
+        performance.drop(columns=["recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]),
+        "12_model_performance.csv",
+    )
 
-    recall_table = performance[
-        ["model", "recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]
-    ].copy()
+    recall_table = performance[["model", "recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]].copy()
     for capacity, suffix in (("1.000%", "1pct"), ("5.000%", "5pct")):
-        recall_table[f"recall_at_{suffix}"] = recall_table["recall_at_capacity"].apply(
-            lambda d, c=capacity: d[c]
-        )
-        recall_table[f"precision_at_{suffix}"] = recall_table["precision_at_capacity"].apply(
-            lambda d, c=capacity: d[c]
-        )
-        recall_table[f"lift_at_{suffix}"] = recall_table["lift_at_capacity"].apply(
-            lambda d, c=capacity: d[c]
-        )
+        recall_table[f"recall_at_{suffix}"] = recall_table["recall_at_capacity"].apply(lambda d, c=capacity: d[c])
+        recall_table[f"precision_at_{suffix}"] = recall_table["precision_at_capacity"].apply(lambda d, c=capacity: d[c])
+        recall_table[f"lift_at_{suffix}"] = recall_table["lift_at_capacity"].apply(lambda d, c=capacity: d[c])
     _write_table(
         recall_table[
             [
                 "model",
-                "recall_at_1pct", "precision_at_1pct", "lift_at_1pct",
-                "recall_at_5pct", "precision_at_5pct", "lift_at_5pct",
+                "recall_at_1pct",
+                "precision_at_1pct",
+                "lift_at_1pct",
+                "recall_at_5pct",
+                "precision_at_5pct",
+                "lift_at_5pct",
             ]
         ],
         "13_recall_at_capacity.csv",
@@ -387,9 +383,7 @@ def run_pipeline(
 
     reliability_before = reliability_table(y_oot, model_scores_oot["lightgbm"])
     reliability_after = reliability_table(y_oot, score_oot)
-    calibration_table = reliability_before.merge(
-        reliability_after, on="bucket", suffixes=("_raw", "_calibrated")
-    )
+    calibration_table = reliability_before.merge(reliability_after, on="bucket", suffixes=("_raw", "_calibrated"))
     _write_table(calibration_table, "19_calibration.csv")
 
     score_drift_table = pd.DataFrame([score_drift(model_scores_test["lightgbm"], score_oot)])
@@ -404,7 +398,9 @@ def run_pipeline(
         print("[9/9] rendering figures and writing the report")
     plots.plot_pr_curves(curves_pr, summary_for_curves, float(y_oot.mean()))
     plots.plot_roc_curves(curves_roc, summary_for_curves)
-    plots.plot_score_distribution(y_oot, score_oot, "Score distribution by class, out-of-time window", "03_score_distribution.png")
+    plots.plot_score_distribution(
+        y_oot, score_oot, "Score distribution by class, out-of-time window", "03_score_distribution.png"
+    )
     plots.plot_calibration(reliability_before, reliability_after)
     plots.plot_cost_curve(cost_curve, single_policy.decline_threshold)
     plots.plot_cost_surface(surface, policy.review_threshold, policy.decline_threshold)
@@ -437,9 +433,7 @@ def run_pipeline(
     # Metrics bundle and report
     # ------------------------------------------------------------------
     manifest = extract.manifest
-    (cfg.OUTPUT_DIR / "generator_manifest.json").write_text(
-        json.dumps(_jsonable(manifest), indent=2), encoding="utf-8"
-    )
+    (cfg.OUTPUT_DIR / "generator_manifest.json").write_text(json.dumps(_jsonable(manifest), indent=2), encoding="utf-8")
 
     drift_bundle = drift_monitor(test, oot, model_scores_test["lightgbm"], score_oot, top_k=15)
 
@@ -457,9 +451,9 @@ def run_pipeline(
             "generator_manifest": manifest,
         },
         "headline_oot": headline_oot,
-        "models": performance.drop(
-            columns=["recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]
-        ).to_dict(orient="records"),
+        "models": performance.drop(columns=["recall_at_capacity", "precision_at_capacity", "lift_at_capacity"]).to_dict(
+            orient="records"
+        ),
         "calibration": {
             "ece_raw": round(expected_calibration_error(y_oot, model_scores_oot["lightgbm"]), 6),
             "ece_calibrated": round(expected_calibration_error(y_oot, score_oot), 6),
@@ -484,28 +478,20 @@ def run_pipeline(
     cfg.METRICS_PATH.write_text(json.dumps(_jsonable(results), indent=2), encoding="utf-8")
 
     _write_results_markdown(results, quality, split_summary, comparison, cases, segments)
-    _save_bundle(
-        prep, production, calibrator, policy, performance, results, seed=seed, n_requested=n_transactions
-    )
+    _save_bundle(prep, production, calibrator, policy, performance, results, seed=seed, n_requested=n_transactions)
 
     if verbose:
         print("\nDone.")
         print(f"  out-of-time PR-AUC   : {headline_oot['pr_auc']}")
         print(f"  out-of-time ROC-AUC  : {headline_oot['roc_auc']}")
-        print(
-            f"  policy thresholds    : review {policy.review_threshold:.4f} / "
-            f"decline {policy.decline_threshold:.4f}"
-        )
+        print(f"  policy thresholds    : review {policy.review_threshold:.4f} / decline {policy.decline_threshold:.4f}")
         print(
             f"  policy on validation : review {policy.n_reviewed:,} / "
             f"decline {policy.n_declined:,} / approve {policy.n_approved:,} "
             f"(two-threshold {policy.expected_cost:,.0f} vs single "
             f"{single_policy.expected_cost:,.0f})"
         )
-        print(
-            f"  cost vs approve-all  : {outcome_oot['expected_cost']:,.0f} vs "
-            f"{baseline['expected_cost']:,.0f}"
-        )
+        print(f"  cost vs approve-all  : {outcome_oot['expected_cost']:,.0f} vs {baseline['expected_cost']:,.0f}")
     return results
 
 
@@ -596,9 +582,7 @@ def _entity_risk_buckets(train: pd.DataFrame, oot: pd.DataFrame) -> pd.DataFrame
     return grouped
 
 
-def _save_bundle(
-    prep, model, calibrator, policy: Policy, performance, results, seed: int, n_requested: int
-) -> None:
+def _save_bundle(prep, model, calibrator, policy: Policy, performance, results, seed: int, n_requested: int) -> None:
     from .api import ScoringBundle, save_bundle
 
     bundle = ScoringBundle(
@@ -671,8 +655,7 @@ def _review_band_reading(sensitivity, cost_model) -> str:
     at_configured = [row for row in sensitivity if abs(row["review_catch_rate"] - catch) < 1e-9]
     if not at_configured:
         return (
-            "The sweep did not include the configured catch rate, so no break-even can be "
-            "quoted; see the table below."
+            "The sweep did not include the configured catch rate, so no break-even can be quoted; see the table below."
         )
 
     open_rows = [row for row in at_configured if row["review_band_open"]]
@@ -692,9 +675,7 @@ def _review_band_reading(sensitivity, cost_model) -> str:
 
     break_even = max(row["review_cost"] for row in open_rows)
     dearer = [
-        row["review_cost"]
-        for row in at_configured
-        if not row["review_band_open"] and row["review_cost"] > break_even
+        row["review_cost"] for row in at_configured if not row["review_band_open"] and row["review_cost"] > break_even
     ]
     at_break_even = next(row for row in open_rows if row["review_cost"] == break_even)
     best = max(sensitivity, key=lambda row: row["review_band_saving"])
@@ -738,7 +719,9 @@ def _write_results_markdown(results, quality, split_summary, comparison, cases, 
         f"- Transactions: **{results['data']['transactions']:,}**  "
         f"(train {results['data']['train']:,} / test {results['data']['test']:,} / out-of-time {results['data']['oot']:,})"
     )
-    add(f"- Fraud rate: **{results['data']['fraud_rate']:.3%}** ({results['data']['oot_frauds']} frauds in the out-of-time window)")
+    add(
+        f"- Fraud rate: **{results['data']['fraud_rate']:.3%}** ({results['data']['oot_frauds']} frauds in the out-of-time window)"
+    )
     add(f"- Identity-table coverage: **{results['data']['identity_coverage']:.1%}**\n")
     add(split_summary.to_markdown(index=False))
     add("")
@@ -866,7 +849,9 @@ def _write_results_markdown(results, quality, split_summary, comparison, cases, 
     if not cases.empty:
         add("## Worked examples\n")
         for label, group in cases.groupby("case", sort=False):
-            add(f"**{label}** - score {group['score'].iloc[0]:.6f}, amount {group['amount'].iloc[0]:.2f}, actual fraud {group['actual_fraud'].iloc[0]}\n")
+            add(
+                f"**{label}** - score {group['score'].iloc[0]:.6f}, amount {group['amount'].iloc[0]:.2f}, actual fraud {group['actual_fraud'].iloc[0]}\n"
+            )
             shown = group[["feature", "value", "shap_contribution", "direction"]].copy()
             # A third of this design matrix is entity history, and the strongest
             # driver is often a feature that is absent. Printing ``nan`` in the

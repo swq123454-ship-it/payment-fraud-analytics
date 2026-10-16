@@ -34,9 +34,7 @@ def execute_sql_file(connection: sqlite3.Connection, path: Path) -> None:
     script = path.read_text(encoding="utf-8")
     statements = [s.strip() for s in script.split(";") if s.strip()]
     for statement in statements:
-        cleaned = "\n".join(
-            line for line in statement.splitlines() if not line.strip().startswith("--")
-        ).strip()
+        cleaned = "\n".join(line for line in statement.splitlines() if not line.strip().startswith("--")).strip()
         if not cleaned:
             continue
         try:

@@ -50,7 +50,9 @@ def fitted(frame):
     calibrator = Calibrator().fit(y_test, model.predict_proba(prep.transform(test))[:, 1])
 
     policy = optimise_policy(
-        y_test, test["TransactionAmt"].to_numpy(dtype=float), calibrator.apply(model.predict_proba(prep.transform(test))[:, 1])
+        y_test,
+        test["TransactionAmt"].to_numpy(dtype=float),
+        calibrator.apply(model.predict_proba(prep.transform(test))[:, 1]),
     )
     bundle = ScoringBundle(
         prep=prep,

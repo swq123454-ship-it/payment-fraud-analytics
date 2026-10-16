@@ -244,9 +244,7 @@ def test_capacity_capped_optimum_matches_the_constrained_brute_force(toy):
             cost = loss[a] + (band[b] - band[a]) + (legit[k] - legit[b]) * friction
             best = min(best, cost)
 
-    policy = optimise_policy(
-        y, amount, score, allow_review=True, max_review_rate=max_review_rate
-    )
+    policy = optimise_policy(y, amount, score, allow_review=True, max_review_rate=max_review_rate)
     assert policy.review_capacity_binding, "fixture no longer exercises the cap"
     assert policy.review_rate <= max_review_rate + 1e-9
     assert policy.expected_cost == pytest.approx(best, abs=0.01)
@@ -305,9 +303,7 @@ def test_a_higher_catch_rate_can_only_help(toy, monkeypatch):
     rates = (0.0, 0.3, 0.7, 1.0)
     costs = []
     for catch in rates:
-        monkeypatch.setattr(
-            cfg, "COST_MODEL", dataclasses.replace(cfg.COST_MODEL, review_catch_rate=catch)
-        )
+        monkeypatch.setattr(cfg, "COST_MODEL", dataclasses.replace(cfg.COST_MODEL, review_catch_rate=catch))
         costs.append(optimise_policy(y, amount, score).expected_cost)
     assert costs == sorted(costs, reverse=True)
 
@@ -373,9 +369,7 @@ def test_a_discretised_score_never_claims_a_gain_it_cannot_implement():
     action = np.where(masks["declined"], 2, np.where(masks["reviewed"], 1, 0))
     reviewable = amount >= cfg.COST_MODEL.min_review_amount
     grouped = (
-        pd.DataFrame({"score": score[reviewable], "action": action[reviewable]})
-        .groupby("score")["action"]
-        .nunique()
+        pd.DataFrame({"score": score[reviewable], "action": action[reviewable]}).groupby("score")["action"].nunique()
     )
     assert grouped.max() == 1
     assert not masks["reviewed"][~reviewable].any()
@@ -397,9 +391,7 @@ def test_a_cheaper_queue_can_only_ever_help(toy):
     """
     y, amount, score = toy
     prices = (1.0, 4.0, 8.0, 20.0)
-    table = review_band_sensitivity(
-        y, amount, score, review_costs=prices, catch_rates=(0.7,)
-    )
+    table = review_band_sensitivity(y, amount, score, review_costs=prices, catch_rates=(0.7,))
     assert set(table["review_cost"]) == set(prices)
 
     ordered = table.sort_values("review_cost", ascending=False)
@@ -424,9 +416,7 @@ def test_the_review_band_opens_when_reviews_get_cheap_enough(toy):
     returns an empty band would look like a finding rather than a bug.
     """
     y, amount, score = toy
-    table = review_band_sensitivity(
-        y, amount, score, review_costs=(0.5,), catch_rates=(0.95,)
-    )
+    table = review_band_sensitivity(y, amount, score, review_costs=(0.5,), catch_rates=(0.95,))
     assert table["review_band_open"].all()
     assert table["n_reviewed"].iloc[0] > 0
     assert table["review_band_saving"].iloc[0] > 0

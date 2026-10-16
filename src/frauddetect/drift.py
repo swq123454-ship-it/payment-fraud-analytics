@@ -146,7 +146,9 @@ def drift_monitor(
         "score_drift": score,
         "top_drifting_features": features.to_dict(orient="records"),
         "features_actionable": int((features["verdict"] == "retrain").sum()) if len(features) else 0,
-        "retrain_recommended": bool(score["verdict"] == "retrain" or (len(features) and (features["verdict"] == "retrain").sum() >= 3)),
+        "retrain_recommended": bool(
+            score["verdict"] == "retrain" or (len(features) and (features["verdict"] == "retrain").sum() >= 3)
+        ),
         "thresholds": {"psi_watch": PSI_WATCH, "psi_action": PSI_ACTION},
     }
 

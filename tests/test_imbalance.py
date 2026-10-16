@@ -143,9 +143,7 @@ def test_sampling_comparison_returns_one_row_per_policy(study_data):
 
 def test_sampling_comparison_records_how_much_data_each_policy_uses(study_data):
     X, y = study_data
-    table = compare_sampling_strategies(
-        X, y, strategies={"random_undersample_10_to_1": 0.10}, n_folds=2, verbose=False
-    )
+    table = compare_sampling_strategies(X, y, strategies={"random_undersample_10_to_1": 0.10}, n_folds=2, verbose=False)
     assert table["share_of_data_used"].iloc[0] < 0.5
 
 

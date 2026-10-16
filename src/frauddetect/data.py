@@ -49,21 +49,55 @@ CARD_TYPE_WEIGHTS = np.array([0.72, 0.19, 0.07, 0.02])
 #: carry disproportionate fraud risk in production data.
 EMAIL_DOMAINS = np.array(
     [
-        "gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com",
-        "comcast.net", "icloud.com", "live.com", "msn.com", "verizon.net",
-        "att.net", "sbcglobal.net", "bellsouth.net", "me.com", "mac.com",
-        "charter.net", "cox.net", "earthlink.net", "juno.com", "aim.com",
-        "mail.com", "gmx.com", "yandex.ru", "protonmail.com", "anonymous.com",
-        "mailinator.com", "guerrillamail.com", "tempmail.com",
+        "gmail.com",
+        "yahoo.com",
+        "hotmail.com",
+        "outlook.com",
+        "aol.com",
+        "comcast.net",
+        "icloud.com",
+        "live.com",
+        "msn.com",
+        "verizon.net",
+        "att.net",
+        "sbcglobal.net",
+        "bellsouth.net",
+        "me.com",
+        "mac.com",
+        "charter.net",
+        "cox.net",
+        "earthlink.net",
+        "juno.com",
+        "aim.com",
+        "mail.com",
+        "gmx.com",
+        "yandex.ru",
+        "protonmail.com",
+        "anonymous.com",
+        "mailinator.com",
+        "guerrillamail.com",
+        "tempmail.com",
     ]
 )
 
 DEVICE_INFO = np.array(
     [
-        "Windows", "MacOS", "iOS Device", "Samsung SM-G950F", "Samsung SM-J700M",
-        "Redmi Note 4", "Moto G (5) Plus", "LG-H870", "HUAWEI VNS-L31",
-        "trident/7.0", "rv:11.0", "iPhone", "iPad", "BLU STUDIO X",
-        "ASUS_Z00AD", "LENOVO A6020a40",
+        "Windows",
+        "MacOS",
+        "iOS Device",
+        "Samsung SM-G950F",
+        "Samsung SM-J700M",
+        "Redmi Note 4",
+        "Moto G (5) Plus",
+        "LG-H870",
+        "HUAWEI VNS-L31",
+        "trident/7.0",
+        "rv:11.0",
+        "iPhone",
+        "iPad",
+        "BLU STUDIO X",
+        "ASUS_Z00AD",
+        "LENOVO A6020a40",
     ]
 )
 
@@ -124,8 +158,32 @@ def _sample_timestamps(rng: np.random.Generator, n: int, days: int) -> np.ndarra
     day = dow + 7 * rng.integers(0, np.maximum(occurrences[dow], 1))
 
     hour_weights = np.array(
-        [0.9, 0.6, 0.4, 0.3, 0.3, 0.5, 1.1, 2.0, 3.1, 3.8, 4.2, 4.4,
-         4.6, 4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 4.9, 4.4, 3.6, 2.6, 1.7]
+        [
+            0.9,
+            0.6,
+            0.4,
+            0.3,
+            0.3,
+            0.5,
+            1.1,
+            2.0,
+            3.1,
+            3.8,
+            4.2,
+            4.4,
+            4.6,
+            4.7,
+            4.8,
+            4.9,
+            5.0,
+            5.1,
+            5.2,
+            4.9,
+            4.4,
+            3.6,
+            2.6,
+            1.7,
+        ]
     )
     hour = rng.choice(24, size=n, p=hour_weights / hour_weights.sum())
     second = rng.integers(0, 3600, size=n) + rng.integers(0, 60, size=n) * 60
@@ -233,9 +291,7 @@ def generate_synthetic_extract(
         risk = population.card_risk[frame.loc[normal_index, "card1"].to_numpy() - 1_000]
         weights = np.exp(0.45 * risk)
         weights = weights / weights.sum()
-        chosen = rng.choice(
-            len(normal_index), size=min(n_scattered, len(normal_index)), replace=False, p=weights
-        )
+        chosen = rng.choice(len(normal_index), size=min(n_scattered, len(normal_index)), replace=False, p=weights)
         frame.loc[normal_index[chosen], cfg.TARGET_COLUMN] = 1
 
     frame = _attach_mismatch_and_missingness(frame, rng, population)
@@ -276,12 +332,37 @@ def generate_synthetic_extract(
 
 
 _TRANSACTION_ORDER = (
-    "TransactionID", "TransactionDT", "TransactionAmt", "ProductCD",
-    "card1", "card2", "card3", "card4", "card5", "card6",
-    "addr1", "addr2", "dist1", "P_emaildomain", "R_emaildomain",
-    "C1", "C2", "C3", "C4", "C5", "C6",
-    "M1", "M2", "M3", "M4", "M5", "M6",
-    cfg.TARGET_COLUMN, "case_closed", "chargeback_amount", "chargeback_days",
+    "TransactionID",
+    "TransactionDT",
+    "TransactionAmt",
+    "ProductCD",
+    "card1",
+    "card2",
+    "card3",
+    "card4",
+    "card5",
+    "card6",
+    "addr1",
+    "addr2",
+    "dist1",
+    "P_emaildomain",
+    "R_emaildomain",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    cfg.TARGET_COLUMN,
+    "case_closed",
+    "chargeback_amount",
+    "chargeback_days",
 )
 
 
@@ -375,11 +456,14 @@ def _generate_episodes(
         # the whole distribution inflated slightly over the period.
         inflation = 1.0 + cfg.AMOUNT_INFLATION_DRIFT * (start / max(days * 86_400, 1))
         step = np.arange(length)
-        amounts = np.where(
-            step == 0,
-            np.exp(rng.normal(1.20, 0.55, length)),
-            np.exp(rng.normal(4.00 + 0.30 * np.minimum(step, 5), 0.85, length)),
-        ) * inflation
+        amounts = (
+            np.where(
+                step == 0,
+                np.exp(rng.normal(1.20, 0.55, length)),
+                np.exp(rng.normal(4.00 + 0.30 * np.minimum(step, 5), 0.85, length)),
+            )
+            * inflation
+        )
 
         ring = ring_first if start < days * 86_400 / 2 else ring_second
         from_ring = rng.random(length) < 0.72
@@ -507,16 +591,10 @@ def _attach_mismatch_and_missingness(
     for index in range(6):
         frame[f"M{index + 1}"] = np.where(draws[:, index], "T", "F")
 
-    frame["card2"] = np.where(
-        rng.random(len(frame)) < _logistic(-2.35 + 0.38 * card_risk), np.nan, frame["card2"]
-    )
+    frame["card2"] = np.where(rng.random(len(frame)) < _logistic(-2.35 + 0.38 * card_risk), np.nan, frame["card2"])
     frame["card5"] = np.where(rng.random(len(frame)) < 0.07 + 0.03 * boost, np.nan, frame["card5"])
-    frame["addr1"] = np.where(
-        rng.random(len(frame)) < (0.09 + 0.10 * boost), np.nan, frame["addr1"]
-    )
-    frame["dist1"] = np.where(
-        rng.random(len(frame)) < (0.35 - 0.25 * boost), np.nan, frame["dist1"]
-    )
+    frame["addr1"] = np.where(rng.random(len(frame)) < (0.09 + 0.10 * boost), np.nan, frame["addr1"])
+    frame["dist1"] = np.where(rng.random(len(frame)) < (0.35 - 0.25 * boost), np.nan, frame["dist1"])
     return frame.drop(columns=["mismatch_boost"])
 
 
@@ -525,9 +603,7 @@ def _attach_categoricals(frame: pd.DataFrame, rng: np.random.Generator) -> pd.Da
     frame = frame.copy()
     frame["ProductCD"] = frame["product_code"]
     frame["P_emaildomain"] = EMAIL_DOMAINS[frame["P_emaildomain_idx"].to_numpy()]
-    frame["R_emaildomain"] = np.where(
-        rng.random(len(frame)) < 0.72, None, frame["P_emaildomain"]
-    )
+    frame["R_emaildomain"] = np.where(rng.random(len(frame)) < 0.72, None, frame["P_emaildomain"])
     return frame
 
 
@@ -547,9 +623,9 @@ def _attach_vendor_counters(frame: pd.DataFrame, rng: np.random.Generator) -> pd
     frame["C1"] = pd.Series(card).map(pd.Series(card).value_counts()).to_numpy(dtype=float)
     frame["C2"] = pd.Series(addr).map(pd.Series(addr).value_counts()).to_numpy(dtype=float)
     frame["C3"] = pd.Series(email).map(pd.Series(email).value_counts()).to_numpy(dtype=float)
-    frame["C4"] = pd.Series(card * 10_000 + addr).map(
-        pd.Series(card * 10_000 + addr).value_counts()
-    ).to_numpy(dtype=float)
+    frame["C4"] = (
+        pd.Series(card * 10_000 + addr).map(pd.Series(card * 10_000 + addr).value_counts()).to_numpy(dtype=float)
+    )
 
     day = ((frame["TransactionDT"] - cfg.SIMULATION_START_EPOCH) // 86_400).to_numpy()
     amount = frame["TransactionAmt"].to_numpy()
@@ -557,9 +633,7 @@ def _attach_vendor_counters(frame: pd.DataFrame, rng: np.random.Generator) -> pd
     frame["C6"] = np.round(amount - card_frame.groupby("card")["amt"].transform("mean").to_numpy(), 2)
 
     ordered = card_frame.sort_values("day")
-    rolling = ordered.groupby("card")["day"].transform(
-        lambda series: series.rolling(window=8, min_periods=1).count()
-    )
+    rolling = ordered.groupby("card")["day"].transform(lambda series: series.rolling(window=8, min_periods=1).count())
     forward = np.empty(len(frame))
     forward[ordered.index.to_numpy()] = rolling.to_numpy(dtype=float)
     frame["C5"] = forward
@@ -585,16 +659,12 @@ def _attach_post_hoc_fields(frame: pd.DataFrame, rng: np.random.Generator) -> pd
         & (rng.random(len(frame)) < 0.82)
     )
     recovery = rng.uniform(0.15, 0.75, len(frame))
-    frame["chargeback_amount"] = np.where(
-        charged_back, (frame["TransactionAmt"].to_numpy() * recovery).round(2), 0.0
-    )
+    frame["chargeback_amount"] = np.where(charged_back, (frame["TransactionAmt"].to_numpy() * recovery).round(2), 0.0)
     frame["chargeback_days"] = np.where(charged_back, days_elapsed - 60 + rng.integers(1, 30, len(frame)), 0)
     return frame
 
 
-def _build_identity_table(
-    frame: pd.DataFrame, rng: np.random.Generator, population: _Population
-) -> pd.DataFrame:
+def _build_identity_table(frame: pd.DataFrame, rng: np.random.Generator, population: _Population) -> pd.DataFrame:
     """Identity records for a minority of traffic.
 
     Coverage is not independent of risk: episode transactions involve devices the
@@ -606,9 +676,7 @@ def _build_identity_table(
     device_risk = population.device_risk[device_idx]
     is_episode = frame["_is_episode"].to_numpy(dtype=bool)
 
-    present = rng.random(len(frame)) < _logistic(
-        -1.45 + 0.55 * device_risk + 1.10 * is_episode.astype(float)
-    )
+    present = rng.random(len(frame)) < _logistic(-1.45 + 0.55 * device_risk + 1.10 * is_episode.astype(float))
     n_present = int(present.sum())
 
     return pd.DataFrame(
@@ -656,13 +724,38 @@ def load_ieee_cis(data_dir: Path | None = None) -> RawExtract:
     transactions["is_fraud"] = pd.to_numeric(transactions["is_fraud"], errors="coerce").fillna(0).astype(int)
 
     keep = [
-        c for c in [
-            "TransactionID", "TransactionDT", "TransactionAmt", "ProductCD",
-            "card1", "card2", "card3", "card4", "card5", "card6",
-            "addr1", "addr2", "dist1", "P_emaildomain", "R_emaildomain",
-            "C1", "C2", "C3", "C4", "C5", "C6",
-            "M1", "M2", "M3", "M4", "M5", "M6", "is_fraud",
-        ] if c in transactions.columns
+        c
+        for c in [
+            "TransactionID",
+            "TransactionDT",
+            "TransactionAmt",
+            "ProductCD",
+            "card1",
+            "card2",
+            "card3",
+            "card4",
+            "card5",
+            "card6",
+            "addr1",
+            "addr2",
+            "dist1",
+            "P_emaildomain",
+            "R_emaildomain",
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C6",
+            "M1",
+            "M2",
+            "M3",
+            "M4",
+            "M5",
+            "M6",
+            "is_fraud",
+        ]
+        if c in transactions.columns
     ]
     transactions = transactions[keep].sort_values("TransactionDT").reset_index(drop=True)
     for column in _TRANSACTION_ORDER:

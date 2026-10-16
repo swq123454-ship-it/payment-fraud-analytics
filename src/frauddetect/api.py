@@ -120,9 +120,7 @@ class ScoringService:
                         {
                             "feature": name,
                             "value": _json_scalar(matrix.iloc[row_position][name]),
-                            "contribution": round(
-                                float(contributions.iloc[row_position][name]), 4
-                            ),
+                            "contribution": round(float(contributions.iloc[row_position][name]), 4),
                         }
                         for name in names
                     ]

@@ -33,9 +33,14 @@ def warehouse(tmp_path_factory):
 def test_every_script_produces_its_tables(warehouse):
     tables = set(list_tables(warehouse))
     for expected in (
-        "stg_transactions", "stg_identity", "data_quality",
-        "fct_transaction_features", "mart_features", "mart_features_vendor",
-        "mart_split_summary", "feature_governance",
+        "stg_transactions",
+        "stg_identity",
+        "data_quality",
+        "fct_transaction_features",
+        "mart_features",
+        "mart_features_vendor",
+        "mart_split_summary",
+        "feature_governance",
     ):
         assert expected in tables, expected
 
@@ -141,9 +146,7 @@ def test_label_based_features_exclude_the_unresolved_period(warehouse):
         eligible = [lab for stamp, lab in history.setdefault(cards[index], []) if times[index] - stamp >= lag_seconds]
         expected = len(eligible)
         if abs(expected - counts[index]) > 1:
-            raise AssertionError(
-                f"row {index}: lagged count {counts[index]} but only {expected} eligible prior rows"
-            )
+            raise AssertionError(f"row {index}: lagged count {counts[index]} but only {expected} eligible prior rows")
         checked += 1
         history[cards[index]].append((int(times[index]), int(labels[index])))
     assert checked == len(features)

@@ -42,10 +42,24 @@ def test_fraud_rate_lands_near_the_target(extract):
 
 def test_expected_columns_are_present(extract):
     for column in (
-        "TransactionID", "TransactionDT", "TransactionAmt", "ProductCD",
-        "card1", "card4", "card6", "addr1", "P_emaildomain",
-        "C1", "C5", "C6", "M1", "M6", "is_fraud",
-        "case_closed", "chargeback_amount", "chargeback_days",
+        "TransactionID",
+        "TransactionDT",
+        "TransactionAmt",
+        "ProductCD",
+        "card1",
+        "card4",
+        "card6",
+        "addr1",
+        "P_emaildomain",
+        "C1",
+        "C5",
+        "C6",
+        "M1",
+        "M6",
+        "is_fraud",
+        "case_closed",
+        "chargeback_amount",
+        "chargeback_days",
     ):
         assert column in extract.transactions.columns, column
 
